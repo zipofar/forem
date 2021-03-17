@@ -10,12 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_19_043102) do
+ActiveRecord::Schema.define(version: 2021_03_16_091102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
+  enable_extension "pg_trgm"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+  enable_extension "unaccent"
 
   create_table "ahoy_events", force: :cascade do |t|
     t.string "name"
@@ -441,6 +443,16 @@ ActiveRecord::Schema.define(version: 2021_02_19_043102) do
     t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["file_name"], name: "index_data_update_scripts_on_file_name", unique: true
+  end
+
+  create_table "devices", force: :cascade do |t|
+    t.string "app_bundle", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.string "platform", null: false
+    t.string "token", null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id", "token", "platform", "app_bundle"], name: "index_devices_on_user_id_and_token_and_platform_and_app_bundle", unique: true
   end
 
   create_table "display_ad_events", force: :cascade do |t|
@@ -1049,6 +1061,22 @@ ActiveRecord::Schema.define(version: 2021_02_19_043102) do
     t.index ["name"], name: "index_roles_on_name"
   end
 
+  create_table "settings_authentications", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.text "value"
+    t.string "var", null: false
+    t.index ["var"], name: "index_settings_authentications_on_var", unique: true
+  end
+
+  create_table "settings_notifications", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.text "value"
+    t.string "var", null: false
+    t.index ["var"], name: "index_settings_notifications_on_var", unique: true
+  end
+
   create_table "site_configs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1140,6 +1168,7 @@ ActiveRecord::Schema.define(version: 2021_02_19_043102) do
     t.text "wiki_body_markdown"
     t.index ["name"], name: "index_tags_on_name", unique: true
     t.index ["social_preview_template"], name: "index_tags_on_social_preview_template"
+    t.index ["supported"], name: "index_tags_on_supported"
   end
 
   create_table "tweets", force: :cascade do |t|
@@ -1420,6 +1449,7 @@ ActiveRecord::Schema.define(version: 2021_02_19_043102) do
   add_foreign_key "credits", "organizations", on_delete: :restrict
   add_foreign_key "credits", "users", on_delete: :cascade
   add_foreign_key "custom_profile_fields", "profiles", on_delete: :cascade
+  add_foreign_key "devices", "users"
   add_foreign_key "display_ad_events", "display_ads", on_delete: :cascade
   add_foreign_key "display_ad_events", "users", on_delete: :cascade
   add_foreign_key "display_ads", "organizations", on_delete: :cascade
