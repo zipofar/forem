@@ -1,4 +1,4 @@
-<%= javascript_packs_with_chunks_tag "stickySaveFooter", defer: true %>
+<%= vite_javascript_tag "stickySaveFooter", defer: true %>
 
 <%= form_for @user, html: { id: "ux-customization-form", class: "sticky-footer-form" } do |f| %>
   <%= f.hidden_field :tab, value: @tab, id: nil %>

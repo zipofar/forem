@@ -80,7 +80,7 @@
     </div>
 
     <% unless @organizations.present? %>
-      <%= javascript_packs_with_chunks_tag "listingForm", defer: true %>
+      <%= vite_javascript_tag "listingForm", defer: true %>
     <% end %>
 
     <div class="crayons-field">

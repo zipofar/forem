@@ -30,4 +30,4 @@
 <%= render "shared/webcomponents_loader_script" %>
 <%= render "articles/v2_form", article: @article, organizations: @organizations, version: @version %>
 
-<%= javascript_packs_with_chunks_tag "clipboardCopy", "articleForm", defer: true %>
+<%= vite_javascript_tag "clipboardCopy", "articleForm", defer: true %>

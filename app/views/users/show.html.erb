@@ -44,7 +44,7 @@
                     class="border-none crayons-link crayons-link--block">
                     <%= @flag_status ? "Unflag" : "Flag" %> @<%= @user.username %>
                   </a>
-                  <%= javascript_packs_with_chunks_tag "profileDropdown", defer: true %>
+                  <%= vite_javascript_tag "profileDropdown", defer: true %>
                 <% end %>
                 <span class="report-abuse-link-wrapper" data-path="/report-abuse?url=<%= user_url(@user) %>"></span>
               </div>
