@@ -1,4 +1,4 @@
-import { toggleFlagUserModal } from '../packs/flagUserModal';
+import { toggleFlagUserModal } from '../entrypoints/flagUserModal';
 import { request } from '@utilities/http';
 
 export function addCloseListener() {

@@ -14,7 +14,7 @@ Aside from prefetching pages, InstantClick also allows you to customize what
 happens when an InstantClick page changes.
 
 ```javascript
-// Found in https://github.com/forem/forem/blob/main/app/javascript/packs/githubRepos.jsx#L11)
+// Found in https://github.com/forem/forem/blob/main/app/javascript/entrypoints/githubRepos.jsx#L11)
 window.InstantClick.on('change', () => {
   loadElement();
 });

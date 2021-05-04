@@ -1,5 +1,5 @@
 import { generateMainImage } from '../article-form/actions';
-import { validateFileInputs } from '../packs/validateFileInputs';
+import { validateFileInputs } from '../entrypoints/validateFileInputs';
 
 export const dragAndUpload = (
   files,

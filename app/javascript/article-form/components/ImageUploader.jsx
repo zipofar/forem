@@ -3,7 +3,7 @@
 import { h } from 'preact';
 import { useReducer } from 'preact/hooks';
 import { generateMainImage } from '../actions';
-import { validateFileInputs } from '../../packs/validateFileInputs';
+import { validateFileInputs } from '../../entrypoints/validateFileInputs';
 import { ClipboardButton } from './ClipboardButton';
 import { Button, Spinner } from '@crayons';
 

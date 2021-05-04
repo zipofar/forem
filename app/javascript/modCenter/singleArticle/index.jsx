@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { h, Component, Fragment } from 'preact';
 import { createPortal } from 'preact/compat';
-import { FlagUserModal } from '../../packs/flagUserModal';
+import { FlagUserModal } from '../../entrypoints/flagUserModal';
 import { formatDate } from './util';
 
 export class SingleArticle extends Component {

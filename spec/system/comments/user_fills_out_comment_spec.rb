@@ -161,7 +161,7 @@ RSpec.xdescribe "Creating Comment", type: :system, js: true do
   end
 
   # This is basically a black box test for
-  # ./app/javascripts/packs/validateFileInputs.js
+  # ./app/javascripts/entrypoints/validateFileInputs.js
   # which is logic to validate file size and format when uploading via a form.
   it "User attaches a valid image" do
     visit article.path.to_s

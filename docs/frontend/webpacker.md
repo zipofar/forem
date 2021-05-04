@@ -27,7 +27,8 @@ For example:
 <%= javascript_packs_with_chunks_tag "webShare", defer: true %>
 ```
 
-The include statement corresponds to the pack `app/javascript/packs/webShare.js`
+The include statement corresponds to the pack
+`app/javascript/entrypoints/webShare.js`
 
 If you have more than one webpacker pack on the page, you need to include it in
 the same `javascript_packs_with_chunks_tag` call. The reason being is it avoids

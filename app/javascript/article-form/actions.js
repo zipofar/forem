@@ -1,4 +1,4 @@
-import { validateFileInputs } from '../packs/validateFileInputs';
+import { validateFileInputs } from '../entrypoints/validateFileInputs';
 
 export function previewArticle(payload, successCb, failureCb) {
   fetch('/articles/preview', {

@@ -18,9 +18,9 @@ for the page to be usable.
 Here are a couple of examples of dynamic import usage on Forem:
 
 - The
-  [Onboarding flow](https://github.com/forem/forem/blob/0633d85b6b0e083bb7b21b11642b2b17d3fe9de6/app/javascript/packs/Onboarding.jsx#L21).
+  [Onboarding flow](https://github.com/forem/forem/blob/0633d85b6b0e083bb7b21b11642b2b17d3fe9de6/app/javascript/entrypoints/Onboarding.jsx#L21).
 - In
-  [homepage](https://github.com/forem/forem/blob/0633d85b6b0e083bb7b21b11642b2b17d3fe9de6/app/javascript/packs/homePage.jsx#L59)
+  [homepage](https://github.com/forem/forem/blob/0633d85b6b0e083bb7b21b11642b2b17d3fe9de6/app/javascript/entrypoints/homePage.jsx#L59)
   (followed tags).
 
 Forem uses [webpacker](frontend/webpacker) (webpack), so what webpack will do is

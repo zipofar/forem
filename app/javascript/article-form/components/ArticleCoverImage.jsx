@@ -4,7 +4,7 @@ import { h, Component, Fragment } from 'preact';
 import PropTypes from 'prop-types';
 import { addSnackbarItem } from '../../Snackbar';
 import { generateMainImage } from '../actions';
-import { validateFileInputs } from '../../packs/validateFileInputs';
+import { validateFileInputs } from '../../entrypoints/validateFileInputs';
 import { onDragOver, onDragExit } from './dragAndDropHelpers';
 import { Button } from '@crayons';
 import { Spinner } from '@crayons/Spinner/Spinner';
