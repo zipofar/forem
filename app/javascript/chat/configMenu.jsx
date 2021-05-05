@@ -1,6 +1,6 @@
 import { h, Component, createRef } from 'preact';
 // eslint-disable-next-line import/no-unresolved
-import ConfigImage from 'images/overflow-horizontal.svg';
+import ConfigImage from '../../assets/images/overflow-horizontal.svg';
 
 export class ConfigMenu extends Component {
   constructor() {

@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-unresolved
-import ThreeDotsIcon from 'images/overflow-horizontal.svg';
+import ThreeDotsIcon from '../../assets/images/overflow-horizontal.svg';
 import { adjustTimestamp } from './util';
 import { ErrorMessage } from './messages/errorMessage';
 import { Button } from '@crayons';
