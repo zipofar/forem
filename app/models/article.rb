@@ -155,7 +155,12 @@ class Article < ApplicationRecord
                   using: {
                     tsearch: {
                       prefix: true,
-                      tsvector_column: :reading_list_document
+                      tsvector_column: :reading_list_document,
+                      highlight: {
+                        StartSel: "<mark>",
+                        StopSel: "</mark>",
+                        MaxFragments: 2
+                      }
                     }
                   },
                   ignoring: :accents
