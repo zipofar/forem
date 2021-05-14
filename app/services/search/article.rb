@@ -12,7 +12,7 @@ module Search
     )
       relation = Homepage::ArticlesQuery.call(user_id: user_id, page: page, per_page: per_page)
 
-      relation = relation.search_articles(term) if term.present?
+      relation = relation.search_articles(term).with_pg_search_highlight if term.present?
 
       relation = sort(relation, sort_by, sort_direction)
 

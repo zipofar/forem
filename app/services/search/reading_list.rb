@@ -75,7 +75,7 @@ module Search
         "INNER JOIN (#{reaction_query_sql}) reactions ON reactions.reactable_id = articles.id",
       )
 
-      relation = relation.search_articles(term) if term.present?
+      relation = relation.search_articles(term).with_pg_search_highlight if term.present?
 
       relation = relation.cached_tagged_with(tags) if tags.any?
 
