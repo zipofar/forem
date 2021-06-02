@@ -3,8 +3,8 @@ feeds_import:
   cron: "20 * * * *"
   class: "Feeds::ImportArticlesWorker"
 log_worker_queue_stats:
-  description: "Records Sidekiq stats in Datadog (runs every 10 minutes)"
-  cron: "*/10 * * * *"
+  description: "Records Sidekiq stats in Datadog (runs every minute)"
+  cron: "* * * * *"
   class: "Metrics::RecordBackgroundQueueStatsWorker"
 record_daily_usage:
   description: "Records daily usage stats (runs daily at 11:00 UTC)"
