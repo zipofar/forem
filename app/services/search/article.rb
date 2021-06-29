@@ -29,6 +29,15 @@ module Search
       # By skipping ordering, we rely on the custom ranking defined in the article's tsvector document
       return relation if term.present? && sort_by.blank?
 
+      # Coerce sort direction to one of the 2 valid values.
+      # If the input starts with a D, case-insensitive, we'll assume they want
+      # it in descending order. Otherwise, we go with ascending.
+      sort_direction = if /\Ad/i.match?(sort_direction.to_s)
+                         :desc
+                       else
+                         :asc
+                       end
+
       return relation.reorder(sort_by => sort_direction) if sort_by&.to_sym == :published_at
 
       relation.reorder(DEFAULT_SORT_BY)
