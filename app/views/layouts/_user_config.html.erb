@@ -1,58 +1,41 @@
 <script>
-  const clearInitInterval = setInterval(function() {
+  try {
+    const bodyClass = localStorage.getItem('config_body_class');
+    const userString = localStorage.getItem('current_user');
 
-    try {
-      const bodyClass = localStorage.getItem('config_body_class');
-      const userString = localStorage.getItem('current_user');
-      console.log('checking class')
-      if (!bodyClass && !userString) {
-        console.log('not yet...')
-        return;
-      }
-      console.log('got it', bodyClass);
+    document.body.className = bodyClass;
 
-      document.body.className = bodyClass;
-
-      if (bodyClass.includes('night-theme')) {
-        document.getElementById('body-styles').innerHTML = '<style><%= Rails.application.assets["themes/night.css"].to_s.squish.html_safe %></style>';
-      } else if (bodyClass.includes('ten-x-hacker-theme')) {
-        document.getElementById('body-styles').innerHTML = '<style><%= Rails.application.assets["themes/hacker.css"].to_s.squish.html_safe %></style>'
-      } else if (bodyClass.includes('pink-theme')) {
-        document.getElementById('body-styles').innerHTML = '<style><%= Rails.application.assets["themes/pink.css"].to_s.squish.html_safe %></style>'
-      } else if(bodyClass.includes('minimal-light-theme')) {
-        document.getElementById('body-styles').innerHTML = '<style><%= Rails.application.assets["themes/minimal.css"].to_s.squish.html_safe %></style>'
-      }
-
-      if (bodyClass.includes('open-dyslexic-article-body')) { // Preloading custom font for anticipated use
-        const link = document.createElement('link');
-        link.as = 'font'
-        link.rel = 'preload'
-        crossorigin = 'anonymous'
-        link.href = '<%= asset_path "OpenDyslexic-Regular.otf" %>';
-        document.head.appendChild(link);
-      }
-
-      if (userString.length > 0) {
-        const user = JSON.parse(userString)
-        const numTags = JSON.parse(user.followed_tags).length
-        if (numTags < 6) {
-          document.body.classList.add("user-tags-followed-"+numTags);
-        } else {
-          document.body.classList.add("user-tags-followed-max");
-        }
-      }
-      clearInterval(clearInitInterval);
-    } catch(e) {
-      setTimeout(function(){
-        Honeybadger.notify(e);
-      },1000)
-      clearInterval(clearInitInterval);
+    if (bodyClass.includes('night-theme')) {
+      document.getElementById('body-styles').innerHTML = '<style><%= Rails.application.assets["themes/night.css"].to_s.squish.html_safe %></style>';
+    } else if (bodyClass.includes('ten-x-hacker-theme')) {
+      document.getElementById('body-styles').innerHTML = '<style><%= Rails.application.assets["themes/hacker.css"].to_s.squish.html_safe %></style>'
+    } else if (bodyClass.includes('pink-theme')) {
+      document.getElementById('body-styles').innerHTML = '<style><%= Rails.application.assets["themes/pink.css"].to_s.squish.html_safe %></style>'
+    } else if(bodyClass.includes('minimal-light-theme')) {
+      document.getElementById('body-styles').innerHTML = '<style><%= Rails.application.assets["themes/minimal.css"].to_s.squish.html_safe %></style>'
     }
-  }, 250);
 
-  setTimeout(function() {
-    clearInitInterval();
-  }, 10000);
+    if (bodyClass.includes('open-dyslexic-article-body')) { // Preloading custom font for anticipated use
+      const link = document.createElement('link');
+      link.as = 'font'
+      link.rel = 'preload'
+      crossorigin = 'anonymous'
+      link.href = '<%= asset_path "OpenDyslexic-Regular.otf" %>';
+      document.head.appendChild(link);
+    }
+
+    if (userString.length > 0) {
+      const user = JSON.parse(userString)
+      const numTags = JSON.parse(user.followed_tags).length
+      if (numTags < 6) {
+        document.body.classList.add("user-tags-followed-"+numTags);
+      } else {
+        document.body.classList.add("user-tags-followed-max");
+      }
+    }
+  } catch(e) {
+      Honeybadger.notify(e);
+  }
 
   try {
     if (navigator.userAgent === 'DEV-Native-ios') {
@@ -66,4 +49,12 @@
       Honeybadger.notify(e);
     },1000)
   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('saveCustomizations').addEventListener('click', (e) => {
+      const { theme } = document.querySelector('[data-theme]:checked')?.dataset
+      localStorage.setItem('config_body_class', theme);
+      console.log(localStorage.getItem('config_body_class'));
+    })
+  });
 </script>
