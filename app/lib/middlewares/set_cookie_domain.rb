@@ -1,6 +1,7 @@
 module Middlewares
-  # Since we must explicitly set the cookie domain in session_store before SiteConfig is available,
-  # this ensures we properly set the cookie to SiteConfig.app_domain at runtime.
+  # Since we must explicitly set the cookie domain in session_store
+  # before Settings::General.app_domain is available,
+  # this ensures we properly set the cookie to Settings::General.app_domain at runtime.
   class SetCookieDomain
     def initialize(app)
       @app = app
