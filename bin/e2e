@@ -30,9 +30,24 @@ printf "Starting the test runner...\n\n"
 
 bundle exec rails assets:precompile;
 
+# Determine if we need to run headless or not as we may be in a containerized environment.
+if type "gp" > /dev/null; then
+   # We're in Gitpod
+   gp env GEM_HOME=/workspace/.rvm
+   gp env GEM_PATH=/workspace/.rvm
+   gp env BUNDLE_PATH=/workspace/.rvm
+   eval $(gp env -e)
+
+   yarn cypress install
+
+   cypress_mode="run"
+else
+   cypress_mode="open"
+fi
+
 if [ "$1" = "--creator-onboarding-seed" ]; then
    echo "Running E2E tests with creator onboarding seed data"
-   CYPRESS_RAILS_CYPRESS_OPTS="--config-file cypress.dev.json" RAILS_ENV=test E2E=true CREATOR_ONBOARDING_SEED_DATA=1 E2E_FOLDER=creatorOnboardingFlows bundle exec rake cypress:open
+   eval "CYPRESS_RAILS_CYPRESS_OPTS=\"--config-file cypress.dev.json\" RAILS_ENV=test E2E=true CREATOR_ONBOARDING_SEED_DATA=1 E2E_FOLDER=creatorOnboardingFlows bundle exec rake cypress:$cypress_mode"
 else
-   CYPRESS_RAILS_CYPRESS_OPTS="--config-file cypress.dev.json" RAILS_ENV=test E2E=true bundle exec rake cypress:open
+   eval "CYPRESS_RAILS_CYPRESS_OPTS=\"--config-file cypress.dev.json\" RAILS_ENV=test E2E=true bundle exec rake cypress:$cypress_mode"
 fi

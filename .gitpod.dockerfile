@@ -20,6 +20,11 @@ RUN bash -c ". .nvm/nvm.sh && \
         nvm install ${NODE_VERSION} && \
         nvm alias default ${NODE_VERSION} && \
         npm install -g yarn"
+
+# Install dependencies for Cypress
+ENV DEBIAN_FRONTEND=noninteractive
+RUN sudo apt-get update && sudo apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+
 ENV PATH=/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin:$PATH
 
 # Install Redis.
