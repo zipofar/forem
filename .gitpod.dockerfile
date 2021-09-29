@@ -22,8 +22,7 @@ ENV PATH=/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin:$PATH
 # Install Redis.
 RUN sudo apt-get update \
         && sudo apt-get install -y \
-        redis-server \
-        && sudo rm -rf /var/lib/apt/lists/*
+        redis-server
 
 # Install Cypress dependencies
 RUN sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
