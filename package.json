@@ -150,6 +150,7 @@
     "@rails/ujs": "6.1.4",
     "@rails/webpacker": "5.4.3",
     "@reach/combobox": "^0.16.1",
+    "@tinymce/tinymce-react": "^3.13.0",
     "ahoy.js": "^0.4.0",
     "autoprefixer": "^10.3.7",
     "babel-preset-preact": "^2.0.0",

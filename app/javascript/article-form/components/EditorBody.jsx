@@ -1,4 +1,5 @@
 import { h } from 'preact';
+import { Editor as TinyMceEditor } from '@tinymce/tinymce-react';
 import PropTypes from 'prop-types';
 import { useLayoutEffect, useRef } from 'preact/hooks';
 import { Toolbar } from './Toolbar';
@@ -43,6 +44,7 @@ export const EditorBody = ({
   switchHelpContext,
   version,
 }) => {
+  const editorRef = useRef(null);
   const textAreaRef = useRef(null);
 
   const { setElement } = useDragAndDrop({
@@ -74,7 +76,7 @@ export const EditorBody = ({
       className="crayons-article-form__body drop-area text-padding"
     >
       <Toolbar version={version} />
-      <MentionAutocompleteTextArea
+      {/* <MentionAutocompleteTextArea
         ref={textAreaRef}
         fetchSuggestions={(username) => fetchSearch('usernames', { username })}
         autoResize
@@ -86,6 +88,33 @@ export const EditorBody = ({
         defaultValue={defaultValue}
         placeholder="Write your post content here..."
         className="crayons-textfield crayons-textfield--ghost crayons-article-form__body__field ff-monospace fs-l h-100"
+      /> */}
+
+      <TinyMceEditor
+        onInit={(evt, editor) => (editorRef.current = editor)}
+        onChange={() => {
+          // Use editorRef to access the editor element and sync that with mention autocomplete maybe?
+          // For markdown see https://www.tiny.cloud/docs/plugins/opensource/textpattern/
+          const markup = editorRef.current.getContent();
+          onChange(markup);
+        }}
+        initialValue="<p>This is the initial content of the editor.</p>"
+        init={{
+          height: 500,
+          menubar: false,
+          plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount',
+          ],
+          toolbar:
+            'undo redo | formatselect | ' +
+            'bold italic backcolor | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'removeformat | help',
+          content_style:
+            'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+        }}
       />
     </div>
   );
