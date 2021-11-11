@@ -194,10 +194,10 @@ function renderTagOnArticle(tagName, colors) {
     getArticleContainer().getElementsByClassName('spec__tags')[0];
 
   const newTag = document.createElement('a');
-  newTag.innerHTML = `<span class="crayons-tag__prefix">#</span>${tagName}`;
-  newTag.setAttribute('class', 'crayons-tag');
+  newTag.innerText = `#${tagName}`;
+  newTag.setAttribute('class', 'crayons-tag mr-1');
   newTag.setAttribute('href', `/t/${tagName}`);
-  newTag.style = `--tag-bg: ${colors.bg}1a; --tag-prefix: ${colors.bg}; --tag-bg-hover: ${colors.bg}1a; --tag-prefix-hover: ${colors.bg};`;
+  newTag.style = `background-color: ${colors.bg}; color: ${colors.text};`;
 
   articleTagsContainer.appendChild(newTag);
 }

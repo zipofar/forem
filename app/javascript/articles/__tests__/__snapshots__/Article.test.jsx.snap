@@ -160,9 +160,9 @@ Object {
                 class="crayons-story__tags"
               >
                 <a
-                  class="crayons-tag crayons-tag--filled"
+                  class="crayons-tag"
                   href="/t/javascript"
-                  style="--tag-bg: #0000001a; --tag-prefix: #000000; --tag-bg-hover: #0000001a; --tag-prefix-hover: #000000;"
+                  style="background: rgb(0, 0, 0); color: rgb(255, 255, 255);"
                 >
                   <span
                     class="crayons-tag__prefix"
@@ -409,9 +409,9 @@ Object {
               class="crayons-story__tags"
             >
               <a
-                class="crayons-tag crayons-tag--filled"
+                class="crayons-tag"
                 href="/t/javascript"
-                style="--tag-bg: #0000001a; --tag-prefix: #000000; --tag-bg-hover: #0000001a; --tag-prefix-hover: #000000;"
+                style="background: rgb(0, 0, 0); color: rgb(255, 255, 255);"
               >
                 <span
                   class="crayons-tag__prefix"

@@ -1,48 +1,32 @@
 @import '../config/import';
 
 .crayons-tag {
-  --tag-bg: var(--base-a5);
-  --tag-prefix: var(--base-a60);
-
-  --tag-bg-hover: var(--base-a5);
-  --tag-prefix-hover: var(--base);
-
-  background: transparent;
-  color: var(--base-80);
+  font-size: var(--fs-s);
+  color: var(--tag-color);
+  line-height: 1.3;
   border-radius: var(--radius);
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-  flex-wrap: nowrap;
-  transition: all var(--transition-props);
-  padding: clamp(var(--su-1), 0.25em, 0.5em) 0.5em;
+  padding: var(--su-1);
+  display: inline-block;
 
   &__prefix {
-    color: var(--tag-prefix);
-    transition: all var(--transition-props);
-    flex-shrink: 0;
+    opacity: 0.4;
+    font-weight: normal;
   }
 
-  &--filled {
-    background: var(--tag-bg);
-    color: var(--base-90);
+  &[href]:hover {
+    color: var(--tag-color-hover);
   }
 
-  &--monochrome {
-    .crayons-tag__prefix {
-      color: var(--base-a60);
-    }
+  &--l {
+    font-size: var(--fs-l);
   }
 
-  &:hover,
-  &:focus {
-    background: var(--tag-bg-hover);
-    color: var(--base);
-    box-shadow: inset 0 0 0 1px var(--tag-bg-hover),
-      inset 0 0 0 1px var(--tag-bg-hover), inset 0 0 0 1px var(--tag-bg-hover);
+  &--xl {
+    font-size: var(--fs-xl);
+  }
 
-    .crayons-tag__prefix {
-      color: var(--tag-prefix-hover);
-    }
+  &--2xl {
+    font-size: var(--fs-2xl);
+    padding: var(--su-1) var(--su-2);
   }
 }

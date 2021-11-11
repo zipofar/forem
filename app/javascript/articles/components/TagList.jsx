@@ -10,13 +10,11 @@ export const TagList = ({ tags = [], flare_tag }) => {
     <div className="crayons-story__tags">
       {flare_tag && (
         <a
-          className="crayons-tag crayons-tag--filled"
+          className="crayons-tag"
           href={`/t/${flare_tag.name}`}
           style={{
-            '--tag-bg': `${flare_tag.bg_color_hex}1a`,
-            '--tag-prefix': flare_tag.bg_color_hex,
-            '--tag-bg-hover': `${flare_tag.bg_color_hex}1a`,
-            '--tag-prefix-hover': flare_tag.bg_color_hex,
+            background: flare_tag.bg_color_hex,
+            color: flare_tag.text_color_hex,
           }}
         >
           <span className="crayons-tag__prefix">#</span>
