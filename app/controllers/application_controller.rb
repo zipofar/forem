@@ -133,7 +133,10 @@ class ApplicationController < ActionController::Base
   end
 
   def raise_suspended
-    raise SuspendedError if current_user&.suspended?
+    return unless current_user&.suspended?
+
+    render json: "Error: suspended", status: :unauthorized
+    raise NotAuthorizedError, "Unauthorized"
   end
 
   def internal_navigation?

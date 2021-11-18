@@ -335,7 +335,7 @@ RSpec.describe "/listings", type: :request do
         user.add_role(:suspended)
         expect do
           post "/listings", params: listing_params
-        end.to raise_error(SuspendedError)
+        end.to raise_error(Pundit::NotAuthorizedError)
       end
     end
 
