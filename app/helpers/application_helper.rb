@@ -86,12 +86,15 @@ module ApplicationHelper
   end
 
   def tag_colors(tag)
+    color_hash = { background: "#d6d9e0", color: "#606570" }
+
     Rails.cache.fetch("view-helper-#{tag}/tag_colors", expires_in: 5.hours) do
-      if (found_tag = Tag.select(%i[bg_color_hex text_color_hex]).find_by(name: tag))
-        { background: found_tag.bg_color_hex, color: found_tag.text_color_hex }
-      else
-        { background: "#d6d9e0", color: "#606570" }
+      found_tag = Tag.select(%i[bg_color_hex text_color_hex]).find_by(name: tag)
+      if found_tag
+        color_hash[:background] = found_tag.bg_color_hex if found_tag.bg_color_hex.match Tag::HEX_COLOR_REGEXP
+        color_hash[:color] = found_tag.text_color_hex if found_tag.text_color_hex.match Tag::HEX_COLOR_REGEXP
       end
+      color_hash
     end
   end
 
