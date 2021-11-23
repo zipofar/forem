@@ -1,8 +1,8 @@
 import { h } from 'preact';
 import { render, fireEvent } from '@testing-library/preact';
 import { axe } from 'jest-axe';
-import { ButtonNew } from '@crayons';
 import SampleIcon from '@img/cog.svg';
+import { ButtonNew } from '@crayons';
 import '@testing-library/jest-dom';
 
 describe('<ButtonNew />', () => {

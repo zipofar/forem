@@ -1,8 +1,8 @@
 import { h } from 'preact';
 import { render } from '@testing-library/preact';
 import { axe } from 'jest-axe';
-import { Link } from '@crayons';
 import SampleIcon from '@img/cog.svg';
+import { Link } from '@crayons';
 
 describe('<Link />', () => {
   it('has no accessibility violations', async () => {

@@ -17,7 +17,8 @@ export default {
         type: 'select',
         options: ['default', 'branded'],
       },
-      description: 'There are two available styles to pick from: _default_ and _branded_. The primary difference is color: _default_ uses grey color and _branded_ uses accent color.',
+      description:
+        'There are two available styles to pick from: _default_ and _branded_. The primary difference is color: _default_ uses grey color and _branded_ uses accent color.',
       table: {
         defaultValue: { summary: 'default' },
       },

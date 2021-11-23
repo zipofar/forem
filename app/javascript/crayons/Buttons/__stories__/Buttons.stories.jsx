@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import ButtonsDoc from './Buttons.mdx';
-import { ButtonNew } from '@crayons';
 import SampleIcon from '@img/cog.svg';
+import { ButtonNew } from '@crayons';
 
 export default {
   component: ButtonNew,
@@ -34,7 +34,8 @@ export default {
       },
     },
     tooltip: {
-      description: "If defined, button will have a custom tooltip on `:hover` and `:focus`. The tooltip content will form part of the button's accessible name unless passed as a `<span>` with `aria-hidden='true'`",
+      description:
+        "If defined, button will have a custom tooltip on `:hover` and `:focus`. The tooltip content will form part of the button's accessible name unless passed as a `<span>` with `aria-hidden='true'`",
       control: {
         type: 'text',
       },

@@ -29,7 +29,7 @@ export const Link = (props) => {
     <a href={href} className={classes} {...otherProps}>
       {icon && (
         <Icon
-          src={icon}
+          icon={icon}
           aria-hidden="true"
           focusable="false"
           className={classNames('c-link__icon')}
@@ -49,5 +49,5 @@ Link.propTypes = {
   href: PropTypes.string.isRequired,
   className: PropTypes.string,
   children: defaultChildrenPropTypes,
-  icon: PropTypes.string,
+  icon: PropTypes.ReactNode,
 };

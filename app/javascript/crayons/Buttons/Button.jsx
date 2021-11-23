@@ -50,7 +50,7 @@ export const ButtonNew = (props) => {
         <Icon
           aria-hidden="true"
           focusable="false"
-          src={icon}
+          icon={icon}
           className={classNames('c-btn__icon')}
         />
       )}
