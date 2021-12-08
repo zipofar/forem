@@ -21,6 +21,8 @@ services:
       DISABLE_SPRING: 1
     volumes:
       - .:/opt/apps/forem:delegated
+    tmpfs:
+      - /tmp
     entrypoint: ["dockerize", "-wait", "tcp://db:5432", "-wait", "tcp://redis:6379", "-wait", "file:///opt/apps/forem/vendor/bundle/.bundle_finished", "-timeout", "2700s", "-wait-retry-interval", "10s"]
     command: [ "bundle", "exec", "rspec"]
 
