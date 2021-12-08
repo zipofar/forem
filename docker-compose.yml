@@ -118,16 +118,16 @@ services:
       POSTGRES_USER: forem
       POSTGRES_PASSWORD: forem
       POSTGRES_DB: PracticalDeveloper_development
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
     volumes:
       - db_data:/var/lib/postgresql/data:delegated
 
   redis:
     image: redis:6.0.9-alpine
     container_name: forem_redis
-    ports:
-      - "6379:6379"
+    expose:
+      - "6379"
 
 volumes:
   db_data:
