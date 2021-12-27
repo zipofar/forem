@@ -4,7 +4,7 @@ RSpec.describe YoutubeTag, type: :liquid_tag do
   describe "#id" do
     let(:valid_id_no_time) { "fhH5xX_yW6U" }
     let(:valid_id_with_time) { "fhH5xX_yW6U?t=0h5m0s" }
-    let(:invalid_id) { Faker::Lorem.characters(number: rand(12..100)) }
+    let(:invalid_id) { "#{Faker::Lorem.characters(number: rand(12..100))}x" }
 
     def generate_new_liquid(id)
       Liquid::Template.register_tag("youtube", YoutubeTag)
