@@ -83,8 +83,9 @@ describe('Comment on articles', () => {
         cy.findByRole('option', { name }).should('exist'),
       );
       cy.findByRole('option', { name: /@search_user_7/ }).should('not.exist');
+
       cy.findByRole('option', { name: /@search_user_3/ }).focus();
-      cy.findByRole('option', { name: /@search_user_3/ }).click();
+      cy.focused().scrollIntoView().click();
 
       getCommentDropdown().should('not.exist');
 
@@ -358,7 +359,7 @@ describe('Comment on articles', () => {
       // Pick an item from the dropdown
       getCommentDropdown();
       cy.findByRole('option', { name: /@search_user_1/ }).focus();
-      cy.findByRole('option', { name: /@search_user_1/ }).click();
+      cy.focused().scrollIntoView().click();
 
       getReplyPlainCommentBox().should(
         'have.value',
