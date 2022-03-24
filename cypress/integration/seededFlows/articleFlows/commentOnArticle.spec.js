@@ -2,6 +2,8 @@ describe('Comment on articles', () => {
   // In these tests we have purposefully avoided the use of aliasing (https://docs.cypress.io/guides/core-concepts/variables-and-aliases#Aliases)
   // Making use of aliases is generally best practice, but due to the implementation of the autocomplete component (switching between two different textareas) it can cause flakiness in these particular tests
 
+  const multiLineCommentText = 'Line 1\n\n\nLine 2\n\n\nLine 3\n\n\n';
+
   const getCommentCombobox = () =>
     cy.findByRole('combobox', {
       name: /^Add a comment to the discussion$/i,
@@ -57,7 +59,7 @@ describe('Comment on articles', () => {
         cy.findByTestId('autocomplete-wrapper');
 
         // Get a handle to the newly substituted textbox
-        getCommentPlainTextBox();
+        getCommentPlainTextBox().type(multiLineCommentText);
         getCommentPlainTextBox().type('Some text @s');
 
         // Verify the combobox has appeared
@@ -93,7 +95,7 @@ describe('Comment on articles', () => {
         getCommentPlainTextBox().should('have.focus');
         getCommentPlainTextBox().should(
           'have.value',
-          'Some text @search_user_3 ',
+          multiLineCommentText + 'Some text @search_user_3 ',
         );
       });
     });
@@ -349,6 +351,7 @@ describe('Comment on articles', () => {
         cy.findAllByTestId('autocomplete-wrapper').should('have.length', 2);
 
         getReplyPlainCommentBox().click();
+        getReplyPlainCommentBox().type(multiLineCommentText);
         getReplyPlainCommentBox().type('Some text @s');
 
         // Verify the combobox has appeared
@@ -363,7 +366,7 @@ describe('Comment on articles', () => {
 
       getReplyPlainCommentBox().should(
         'have.value',
-        'Some text @search_user_1 ',
+        multiLineCommentText + 'Some text @search_user_1 ',
       );
     });
 
