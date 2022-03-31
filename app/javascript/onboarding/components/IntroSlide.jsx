@@ -39,6 +39,15 @@ export class IntroSlide extends Component {
     }).then((response) => {
       if (response.ok) {
         localStorage.setItem('shouldRedirectToOnboarding', false);
+
+        const { user } = document.body.dataset;
+        let currentUser = null;
+        if (user) {
+          currentUser = JSON.parse(user);
+        }
+
+        currentUser.saw_onboarding = true;
+        document.body.dataset.user = JSON.stringify(currentUser);
         next();
       }
     });
