@@ -151,7 +151,7 @@ class Article < ApplicationRecord
   validates :video_source_url, url: { allow_blank: true, schemes: ["https"] }
   validates :video_state, inclusion: { in: %w[PROGRESSING COMPLETED] }, allow_nil: true
   validates :video_thumbnail_url, url: { allow_blank: true, schemes: %w[https http] }
-  validate :has_correct_published_at?
+  # validate :has_correct_published_at?
 
   validate :canonical_url_must_not_have_spaces
   # validate :past_or_present_date
@@ -477,7 +477,7 @@ class Article < ApplicationRecord
   end
 
   def current_state_path
-    published ? "/#{username}/#{slug}" : "/#{username}/#{slug}?preview=#{password}"
+    published && !scheduled? ? "/#{username}/#{slug}" : "/#{username}/#{slug}?preview=#{password}"
   end
 
   def has_frontmatter?
