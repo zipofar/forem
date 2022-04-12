@@ -38,6 +38,31 @@ export class IntroSlide extends Component {
       credentials: 'same-origin',
     }).then((response) => {
       if (response.ok) {
+        // verify a non-empty json response was returned from the update before continuing
+        if (response.body) {
+          if (response.body.getReader) {
+            response.body
+              .getReader()
+              .read()
+              .then(({ value }) => {
+                if (value == null) {
+                  // value is null and response is 200 ok when we handle an invalid authenticity token
+                  // so we'll get a new one before retrying
+                  window.fetchBaseData(); // retrieve a new csrf token
+                  (function waitForCsrfChange() {
+                    if (getContentOfToken('csrf-token') == csrfToken) {
+                      setTimeout(waitForCsrfChange, 50);
+                      return;
+                    }
+                    // base data request complete and new token in meta tag, continue
+                    return this.onSumbit();
+                  })();
+                }
+              });
+          }
+        }
+
+        // json response was not empty, processing succeeded
         localStorage.setItem('shouldRedirectToOnboarding', false);
         next();
       }
