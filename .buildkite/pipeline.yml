@@ -1,0 +1,17 @@
+steps:
+  - name: ":rspec:"
+    command: "scripts/ci/buildkite.sh"
+    artifact_paths:
+      - "log/**/*"
+      - "tmp/screenshots/*.png"
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgresql://forem:forem@db:5432/Forem_test
+      BUILDKITE_DOCKER_COMPOSE_CONTAINER: rails
+    plugins:
+      - docker-compose#v3.5.0:
+          run: rspec
+          config: test-compose.yml
+    agents:
+      queue: $BUILDKITE_AGENT_META_DATA_QUEUE
+    branches: "/buildkite*"
