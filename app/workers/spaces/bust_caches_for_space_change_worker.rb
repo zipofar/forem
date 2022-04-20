@@ -11,6 +11,10 @@ module Spaces
       # Addresses the cache in: app/views/stories/tagged_articles/_sidebar.html, which has
       # conditional rendering of buttons based on the state of the space.
       Rails.cache.delete_matched("tag-sidebar-*")
+
+      # Addresses the cache in app/views/stories/tagged_articles/index.html.erb, which wraps the
+      # above partial.
+      Rails.cache.delete_matched("tag-stories-index-*")
     end
   end
 end

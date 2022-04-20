@@ -9,6 +9,6 @@ RSpec.describe Spaces::BustCachesForSpaceChangeWorker, type: :worker do
 
   it "deletes matched cache keys" do
     worker.perform
-    expect(Rails.cache).to have_received(:delete_matched)
+    expect(Rails.cache).to have_received(:delete_matched).at_least(1).time
   end
 end
