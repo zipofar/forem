@@ -43,6 +43,7 @@ RSpec.describe Spam::Handler, type: :service do
         expect { handler }.to change { Reaction.where(reactable: article, category: "vomit").count }.by(1)
         expect(article.user.reload).to be_suspended
         expect(Note.where(noteable: article.user, reason: "automatic_suspend").count).to eq(1)
+        expect(Note.where(noteable: article.user, reason: "automatic_suspend").last.content).to include(article.id.to_s)
       end
     end
   end
@@ -90,6 +91,7 @@ RSpec.describe Spam::Handler, type: :service do
         expect { handler }.to change { Reaction.where(reactable: comment, category: "vomit").count }.by(1)
         expect(comment.user.reload).to be_suspended
         expect(Note.where(noteable: comment.user, reason: "automatic_suspend").count).to eq(1)
+        expect(Note.where(noteable: comment.user, reason: "automatic_suspend").last.content).to include(comment.id.to_s)
       end
     end
   end

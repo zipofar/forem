@@ -24,6 +24,7 @@ fr:
       mention_too_many:
         one: You cannot mention more than %{count} users in a post!
         other: You cannot mention more than %{count} users in a post!
+      suspended_too_many: 'User suspended for too many spammy articles, triggered by autovomit. Article ID: %{model_id}'
     broadcast:
       single_active: You can only have one active announcement broadcast
     comment:
@@ -36,7 +37,7 @@ fr:
         Article: Article
         item: item
         PodcastEpisode: Podcast episode
-      suspended_too_many: User suspended for too many spammy interactions, triggered by autovomit.
+      suspended_too_many: 'User suspended for too many spammy comments, triggered by autovomit. Comment ID: %{model_id}'
       mention_too_many:
         one: You cannot mention more than %{count} users in a comment!
         other: You cannot mention more than %{count} users in a comment!

@@ -17,7 +17,7 @@ module Spam
 
       return unless Reaction.user_has_been_given_too_many_spammy_article_reactions?(user: article.user)
 
-      suspend!(user: article.user)
+      suspend!(user: article.user, model: article)
     end
 
     # Test the comment for spamminess.  If it's not spammy, don't do anything.
@@ -39,7 +39,7 @@ module Spam
 
       return unless Reaction.user_has_been_given_too_many_spammy_comment_reactions?(user: comment.user)
 
-      suspend!(user: comment.user)
+      suspend!(user: comment.user, model: comment)
     end
 
     # Test the user for spamminess.  If it's not spammy, don't do anything.
@@ -62,14 +62,14 @@ module Spam
     #       controller rescues and logs the user out.  Because, as
     #       written they might still be logged in but have limited
     #       abilities.
-    def self.suspend!(user:)
+    def self.suspend!(user:, model:)
       user.add_role(:suspended)
 
       Note.create(
         author_id: Settings::General.mascot_user_id,
         noteable: user,
         reason: "automatic_suspend",
-        content: I18n.t("models.comment.suspended_too_many"),
+        content: I18n.t("models.#{model.class.name.downcase}.suspended_too_many", model_id: model.id),
       )
     end
     private_class_method :suspend!
