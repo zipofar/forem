@@ -17,14 +17,12 @@ describe DataUpdateScripts::RenameYaddaYadda do
 
   context "with a ClassifiedListing taggable_type" do
     before do
+      # update column to bypass validation on type name
       listing.taggings.first.update_column(:taggable_type, "ClassifiedListing")
     end
 
     it "renames the taggable type from ClassifiedListing to Listing" do
-      # one fast way is to look at the listings taggings (which is empty when the type is wrong)
-      # expect { described_class.new.run }.to change { listing.taggings.count }.by 1
-
-      expect(tag.taggings.first.taggable_type).to eq("Listing")
+      expect(tag.taggings.first.taggable_type).to eq("ClassifiedListing")
 
       described_class.new.run
 
