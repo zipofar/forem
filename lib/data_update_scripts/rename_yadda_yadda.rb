@@ -1,13 +1,13 @@
 module DataUpdateScripts
   class RenameYaddaYadda
-    SQL = <<ENDOFQUERY.freeze
+    UPDATE_SQL = <<ENDOFQUERY.freeze
  UPDATE taggings
  SET taggable_type = 'Listing'
  WHERE taggable_type = 'ClassifiedListing'
 ENDOFQUERY
 
     def run
-      Tag.connection.execute(SQL)
+      Tag.connection.execute(UPDATE_SQL)
     end
   end
 end
