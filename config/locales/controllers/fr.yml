@@ -17,14 +17,14 @@ fr:
       error: Something went wrong; Comment NOT deleted.
       notice: Comment was successfully deleted.
     markdown: 'There was an error in your markdown: %{error}'
-    markdown_html: "<p>😔 There was an error in your markdown</p><hr><p>%{error}</p>"
+    markdown_html: '<p>😔 There was an error in your markdown</p><hr><p>%{error}</p>'
     moderated: Not allowed due to moderation action
   confirmations_controller:
     email_sent: Email sent! Please contact support at %{email} if you are having trouble receiving your confirmation instructions.
   credits_controller:
     done:
-      one: "%{count} new credits purchased!"
-      other: "%{count} new credits purchased!"
+      one: '%{count} new credits purchased!'
+      other: '%{count} new credits purchased!'
   devices_controller:
     not_found: Not Found
   discussion_locks_controller:
@@ -33,13 +33,13 @@ fr:
   email_subscriptions_controller:
     badge_notifications: badge notifications
     comment_notifications: comment notifications
-    digest_emails: "%{community} digest emails"
+    digest_emails: '%{community} digest emails'
     follower_notifications: follower notifications
     mention_notifications: mention notifications
     this_list: this list
     unread_notifications: unread notifications
   feedback_messages_controller:
-    error_fill: "Make sure the forms are filled. 🤖 Other possible errors: %{errors}"
+    error_fill: 'Make sure the forms are filled. 🤖 Other possible errors: %{errors}'
     n_a: N/A
     submitted: Your report is submitted
   follows_controller:
@@ -67,7 +67,8 @@ fr:
   podcasts_controller:
     podcast_suggested: Podcast suggested
   profiles_controller:
-    updated: Your profile has been updated
+    updated: Your profile has been updated.
+    low_color_contrast: Selected brand colors have too low contrast for accessibility.
   rating_votes_controller:
     not_upserted_successfully: Not Upserted Successfully
   registrations_controller:
@@ -86,7 +87,7 @@ fr:
       not_found: not found
   stories_controller:
     404_bio_not_found: 404 bio not found
-    searching: "...searching"
+    searching: '...searching'
   stripe_active_cards_controller:
     cannot_remove: Can't remove card if you have an active membership. Please cancel your membership first.
     cannot_update: There was a problem updating your billing info.
@@ -96,14 +97,14 @@ fr:
     failure: 'Failure: %{errors}'
     destroyed: Tag adjustment destroyed
   tags_controller:
-    tag_successfully_updated: "Tag successfully updated! 👍 "
+    tag_successfully_updated: 'Tag successfully updated! 👍 '
   users_controller:
-    removed_admin: "%{name} is no longer an admin."
-    removed_member: "%{name} is no longer part of your organization."
-    added_admin: "%{name} is now an admin."
+    removed_admin: '%{name} is no longer an admin.'
+    removed_member: '%{name} is no longer part of your organization.'
+    added_admin: '%{name} is now an admin.'
     provide_email: Please, provide an email to delete your account.
     provide_email_delete: Please, provide an email to delete your account
-    send_export: " The export will be emailed to you shortly."
+    send_export: ' The export will be emailed to you shortly.'
     invalid_secret: The given organization secret was invalid.
     username_blank: Username cannot be blank
     deletion_in_progress: You have already requested account deletion. Please, check your email for further instructions.
