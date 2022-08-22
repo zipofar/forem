@@ -1,4 +1,5 @@
 import { h } from 'preact';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Options } from './Options';
 import { ButtonNew as Button } from '@crayons';
@@ -8,7 +9,8 @@ export const EditorActions = ({
   onPublish,
   onClearChanges,
   published,
-  publishedAt,
+  publishedAtDate,
+  publishedAtTime,
   schedulingEnabled,
   edited,
   version,
@@ -37,15 +39,25 @@ export const EditorActions = ({
     );
   }
 
-  const now = new Date();
-  const publishedAtDate = publishedAt ? new Date(publishedAt) : now;
-  const schedule = publishedAtDate > now;
+  const now = moment();
+  const publishedAtObj = publishedAtDate
+    ? moment(`${publishedAtDate} ${publishedAtTime || '00:00'}`)
+    : now;
+  const schedule = publishedAtObj > now;
+  const wasScheduled = passedData.publishedAtWas > now;
 
-  const saveButtonText = schedule
-    ? 'Schedule'
-    : published || isVersion1
-    ? 'Save changes'
-    : 'Publish';
+  let saveButtonText;
+  if (isVersion1) {
+    saveButtonText = 'Save changes';
+  } else if (schedule) {
+    saveButtonText = 'Schedule';
+  } else if (wasScheduled || !published) {
+    // if the article was saved as scheduled, and the user clears publishedAt in the post options, the save button text is changed to "Publish"
+    // to make it clear that the article is going to be published right away
+    saveButtonText = 'Publish';
+  } else {
+    saveButtonText = 'Save changes';
+  }
 
   return (
     <div className="crayons-article-form__footer">
@@ -95,7 +107,8 @@ EditorActions.propTypes = {
   onSaveDraft: PropTypes.func.isRequired,
   onPublish: PropTypes.func.isRequired,
   published: PropTypes.bool.isRequired,
-  publishedAt: PropTypes.string.isRequired,
+  publishedAtTime: PropTypes.string.isRequired,
+  publishedAtDate: PropTypes.string.isRequired,
   schedulingEnabled: PropTypes.bool.isRequired,
   edited: PropTypes.bool.isRequired,
   version: PropTypes.string.isRequired,

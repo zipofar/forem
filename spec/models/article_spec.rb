@@ -500,6 +500,18 @@ RSpec.describe Article, type: :model do
         .to include("only future or current published_at allowed when publishing an article")
     end
 
+    it "doesn't allow recent published_at when publishing on create" do
+      article2 = build(:article, published_at: 1.hour.ago, published: true)
+      expect(article2.valid?).to be false
+      expect(article2.errors[:published_at])
+        .to include("only future or current published_at allowed when publishing an article")
+    end
+
+    it "allows recent published_at when publishing on create" do
+      article2 = build(:article, published_at: 5.minutes.ago, published: true)
+      expect(article2.valid?).to be true
+    end
+
     it "doesn't allow updating published_at if an article has already been published" do
       article.published_at = (Date.current + 10.days).strftime("%d/%m/%Y %H:%M")
       expect(article.valid?).to be false
@@ -789,15 +801,15 @@ RSpec.describe Article, type: :model do
 
   describe ".active_help" do
     it "returns properly filtered articles under the 'help' tag" do
-      filtered_article = create(:article, user: user, tags: "help",
-                                          published_at: 13.hours.ago, comments_count: 5, score: -3)
+      filtered_article = create(:article, :past, user: user, tags: "help",
+                                                 past_published_at: 13.hours.ago, comments_count: 5, score: -3)
       articles = described_class.active_help
       expect(articles).to include(filtered_article)
     end
 
     it "returns any published articles tagged with 'help' when there are no articles that fit the criteria" do
-      unfiltered_article = create(:article, user: user, tags: "help",
-                                            published_at: 10.hours.ago, comments_count: 8, score: -5)
+      unfiltered_article = create(:article, :past, user: user, tags: "help",
+                                                   past_published_at: 10.hours.ago, comments_count: 8, score: -5)
       articles = described_class.active_help
       expect(articles).to include(unfiltered_article)
     end
@@ -1161,51 +1173,6 @@ RSpec.describe Article, type: :model do
         article = build(:article, published: false)
         sidekiq_assert_no_enqueued_jobs(only: Articles::ScoreCalcWorker) do
           article.save
-        end
-      end
-    end
-
-    describe "slack messages" do
-      before do
-        # making sure there are no other enqueued jobs from other tests
-        sidekiq_perform_enqueued_jobs(only: Slack::Messengers::Worker)
-      end
-
-      # slack messages will be queued in a publish worker
-      it "doesn't queue a slack message to be sent for a new published article" do
-        sidekiq_assert_no_enqueued_jobs(only: Slack::Messengers::Worker) do
-          create(:article, user: user, published: true, published_at: Time.current)
-        end
-      end
-
-      it "does not queue a message for a new article published more than 30 seconds ago" do
-        Timecop.freeze(Time.current) do
-          sidekiq_assert_no_enqueued_jobs(only: Slack::Messengers::Worker) do
-            create(:article, published: true, published_at: 31.seconds.ago)
-          end
-        end
-      end
-
-      it "does not queue a message for a draft article" do
-        sidekiq_assert_no_enqueued_jobs(only: Slack::Messengers::Worker) do
-          markdown = "---\ntitle: Title\npublished: false\ndescription:\ntags: heytag\n---\n\nHey this is the article"
-          create(:article, body_markdown: markdown, published: false)
-        end
-      end
-
-      it "doesn't queue a message for an article that remains published" do
-        sidekiq_assert_no_enqueued_jobs(only: Slack::Messengers::Worker) do
-          markdown = "---\ntitle: Title\npublished: true\ndescription:\ntags: heytag\n---\n\nHey this is the article"
-          article.update(body_markdown: markdown, published: true)
-        end
-      end
-
-      it "queues a message for a draft article that gets published" do
-        Timecop.freeze(Time.current) do
-          sidekiq_assert_enqueued_with(job: Slack::Messengers::Worker) do
-            article.update_columns(published: false)
-            article.update(published: true, published_at: Time.current)
-          end
         end
       end
     end

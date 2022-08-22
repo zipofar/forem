@@ -180,7 +180,6 @@ class Article < ApplicationRecord
   before_save :fetch_video_duration
   before_save :set_caches
   before_create :create_password
-  after_update :notify_slack_channel_about_publication, if: -> { published && saved_change_to_published? }
   before_destroy :before_destroy_actions, prepend: true
 
   after_save :create_conditional_autovomits
@@ -444,7 +443,7 @@ class Article < ApplicationRecord
   end
 
   def scheduled?
-    published_at.future?
+    published_at? && published_at.future?
   end
 
   def search_id
@@ -818,13 +817,13 @@ class Article < ApplicationRecord
 
   def future_or_current_published_at
     # allow published_at in the future or within 15 minutes in the past
-    return if !published || published_at > Time.current - (15 * 60 * 60)
+    return if !published || published_at > 15.minutes.ago
 
     errors.add(:published_at, I18n.t("models.article.future_or_current_published_at"))
   end
 
   def has_correct_published_at?
-    return unless published_at_was
+    return unless published_at_was && published
     # don't allow editing published_at if an article has already been published
     # allow changes within one minute in case of editing via frontmatter w/o specifying seconds
     return unless published_was && published_at_was < Time.current &&
@@ -944,10 +943,6 @@ class Article < ApplicationRecord
 
   def touch_collection
     collection.touch if collection && previous_changes.present?
-  end
-
-  def notify_slack_channel_about_publication
-    Slack::Messengers::ArticlePublished.call(article: self)
   end
 
   def enrich_image_attributes
