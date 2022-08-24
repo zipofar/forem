@@ -585,7 +585,7 @@ describe('Comment on articles', () => {
       cy.get('@likeButton').within(() => {
         cy.get('span.reactions-count').should('have.text', '0');
         cy.get('span.reactions-label').should(($span) => {
-          expect($span.text().trim()).equal('');
+          expect($span.text().trim()).equal('Like');
         });
       });
 
@@ -613,7 +613,7 @@ describe('Comment on articles', () => {
       cy.get('@likeButton').within(() => {
         cy.get('span.reactions-count').should('have.text', '0');
         cy.get('span.reactions-label').should(($span) => {
-          expect($span.text().trim()).equal('');
+          expect($span.text().trim()).equal('Like');
         });
       });
     });
