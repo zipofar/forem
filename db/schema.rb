@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_28_162321) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_04_101218) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -444,6 +444,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_28_162321) do
   create_table "display_ad_events", force: :cascade do |t|
     t.string "category"
     t.string "context_type"
+    t.integer "counts_for", default: 1, null: false
     t.datetime "created_at", precision: nil, null: false
     t.bigint "display_ad_id"
     t.datetime "updated_at", precision: nil, null: false
@@ -952,6 +953,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_28_162321) do
     t.bigint "user_id"
     t.index ["article_id"], name: "index_rating_votes_on_article_id"
     t.index ["user_id", "article_id", "context"], name: "index_rating_votes_on_user_id_and_article_id_and_context", unique: true
+  end
+
+  create_table "reaction_categories", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.boolean "editable", default: true
+    t.string "icon", null: false
+    t.string "name", null: false
+    t.integer "position", null: false
+    t.boolean "privileged", default: false
+    t.boolean "published", default: false
+    t.float "score", default: 1.0
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_reaction_categories_on_slug", unique: true
   end
 
   create_table "reactions", force: :cascade do |t|
