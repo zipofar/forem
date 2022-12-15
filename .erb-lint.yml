@@ -22,25 +22,14 @@ linters:
   Rubocop:
     enabled: true
     rubocop_config:
-      inherit_from:
-        - .rubocop.yml
-      Layout/InitialIndentation:
-        Enabled: false
-      Layout/LineLength:
-        Max: 289
-        Exclude:
-          - '**/app/views/comments/_comment_proper.html.erb'
+      require: standard
+      inherit_gem:
+        standard: config/base.yml
       Layout/TrailingEmptyLines:
+        Enabled: false
+      Layout/InitialIndentation:
         Enabled: false
       Lint/UselessAssignment:
         Enabled: false
-      Rails/OutputSafety:
-        Enabled: false
-        Exclude:
-          - '**/app/views/feedback_messages/index.html.erb'
-          - '**/app/views/layouts/_styles.html.erb'
-          - '**/app/views/liquid_embeds/show.html.erb'
-          - '**/app/views/moderations/mod.html.erb'
-          - '**/app/views/pages/onboarding.html.erb'
-          - '**/app/views/partnerships/show.html.erb'
-          - '**/app/views/partnerships/index.html.erb'
+      AllCops:
+        DisabledByDefault: true
