@@ -22,6 +22,19 @@ RSpec.describe "Follows #show" do
     expect(response.body).to eq("not-logged-in")
   end
 
+  it "returns 'follow-back' when other user is a follower" do
+    user.follow(current_user)
+    get "/follows/#{user.id}", params: { followable_type: "User" }
+    expect(response.body).to eq("follow-back")
+  end
+
+  it "returns 'mutual' when there's mutual follows" do
+    user.follow(current_user)
+    current_user.follow(user)
+    get "/follows/#{user.id}", params: { followable_type: "User" }
+    expect(response.body).to eq("mutual")
+  end
+
   it "returns false when not following" do
     expect(get_following_status.uniq[0]).to eq("false")
   end
