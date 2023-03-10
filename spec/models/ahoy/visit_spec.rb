@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe Ahoy::Visit, type: :model do
-  let(:visit) { create(:ahoy_visit) }
+RSpec.describe Ahoy::Visit do
+  let(:visit) { build(:ahoy_visit) }
 
   describe "validations" do
     describe "builtin validations" do

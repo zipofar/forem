@@ -10,19 +10,20 @@ RSpec.describe Article do
   before { allow(FeatureFlag).to receive(:enabled?).with(:consistent_rendering, any_args).and_return(true) }
 
   let(:user) { create(:user) }
-  let!(:article) { create(:article, user: user) }
+  let(:article) { create(:article, user: user) }
 
   include_examples "#sync_reactions_count", :article
   it_behaves_like "UserSubscriptionSourceable"
   it_behaves_like "Taggable"
 
   describe "validations" do
+    let(:user) { build_stubbed(:user) }
+    let(:article) { build_stubbed(:article) }
+
     it { is_expected.to belong_to(:collection).optional }
     it { is_expected.to belong_to(:organization).optional }
     it { is_expected.to belong_to(:user) }
-
     it { is_expected.to have_one(:discussion_lock).dependent(:delete) }
-
     it { is_expected.to have_many(:comments).dependent(:nullify) }
     it { is_expected.to have_many(:context_notifications).dependent(:delete_all) }
     it { is_expected.to have_many(:mentions).dependent(:delete_all) }
@@ -36,11 +37,9 @@ RSpec.describe Article do
     it { is_expected.to have_many(:reactions).dependent(:destroy) }
     it { is_expected.to have_many(:tags) }
     it { is_expected.to have_many(:user_subscriptions).dependent(:nullify) }
-
     it { is_expected.to validate_length_of(:body_markdown).is_at_least(0) }
     it { is_expected.to validate_length_of(:cached_tag_list).is_at_most(126) }
     it { is_expected.to validate_length_of(:title).is_at_most(128) }
-
     it { is_expected.to validate_presence_of(:comments_count) }
     it { is_expected.to validate_presence_of(:positive_reactions_count) }
     it { is_expected.to validate_presence_of(:previous_public_reactions_count) }
@@ -49,56 +48,16 @@ RSpec.describe Article do
     it { is_expected.to validate_presence_of(:reactions_count) }
     it { is_expected.to validate_presence_of(:user_subscriptions_count) }
     it { is_expected.to validate_presence_of(:title) }
-
     it { is_expected.to validate_uniqueness_of(:slug).scoped_to(:user_id) }
-
+    it { is_expected.to validate_uniqueness_of(:body_markdown).scoped_to(:user_id, :title) }
     it { is_expected.not_to allow_value("foo").for(:main_image_background_hex_color) }
 
-    describe "::admin_published_with" do
-      it "includes mascot-published articles" do
-        allow(Settings::General).to receive(:mascot_user_id).and_return(3)
-        user = create(:user, id: 3)
-        create(:article, user: user, tags: "challenge")
-        expect(described_class.admin_published_with("challenge").count).to eq(1)
-      end
-
-      it "includes staff-user-published articles" do
-        allow(Settings::Community).to receive(:staff_user_id).and_return(3)
-        user = create(:user, id: 3)
-        create(:article, user: user, tags: "challenge")
-        expect(described_class.admin_published_with("challenge").count).to eq(1)
-      end
-
-      it "includes admin published articles" do
-        user = create(:user, :admin)
-        create(:article, user: user, tags: "challenge")
-        expect(described_class.admin_published_with("challenge").count).to eq(1)
-      end
-
-      it "does not include regular user published articles" do
-        user = create(:user)
-        create(:article, user: user, tags: "challenge")
-        expect(described_class.admin_published_with("challenge").count).to eq(0)
-      end
-    end
-
     describe "#body_markdown" do
-      it "is unique scoped for user_id and title", :aggregate_failures do
-        art2 = build(:article, body_markdown: article.body_markdown, user: article.user, title: article.title)
-
-        expect(art2).not_to be_valid
-        expect(art2.errors_as_sentence).to match("markdown has already been taken")
-      end
-
-      # using https://unicode-table.com/en/11A15/ multibyte char
-      it "is valid if its bytesize is less than 800 kilobytes" do
-        article.body_markdown = "𑨕" * 204_800 # 4 bytes x 204800 = 800 kilobytes
-
-        expect(article).to be_valid
-      end
-
       it "is not valid if its bytesize exceeds 800 kilobytes" do
-        article.body_markdown = "𑨕" * 204_801
+        # using https://unicode-table.com/en/11A15/ multibyte char
+        # 4 bytes x 204800 = 800 kilobytes
+        body_markdown = "𑨕" * 204_801
+        article = build(:article, title: "test", body_markdown: body_markdown)
 
         expect(article).not_to be_valid
         expect(article.errors_as_sentence).to match("too long")
@@ -107,26 +66,28 @@ RSpec.describe Article do
 
     describe "#validate co_authors" do
       it "is invalid if the co_author is the same as the author" do
-        article.co_author_ids = [user.id]
+        article.co_author_ids = [article.user.id]
 
         expect(article).not_to be_valid
+        expect(article.errors.added?(:co_author_ids, I18n.t("models.article.same_author"))).to be true
       end
 
       it "is invalid if there are duplicate co_authors for the same article" do
-        co_author1 = create(:user)
-        article.co_author_ids = [co_author1, co_author1]
+        co_author = build_stubbed(:user)
+        article.co_author_ids = [co_author, co_author]
 
         expect(article).not_to be_valid
+        expect(article.errors.added?(:co_author_ids, I18n.t("models.article.unique_coauthor"))).to be true
       end
 
       it "is invalid if the co_author is entered as a text value rather than an integer" do
-        article.co_author_ids = [user.id, "abc"]
+        article.co_author_ids = [article.user.id, "abc"]
 
         expect(article).not_to be_valid
       end
 
       it "is invalid if the co_author ID is not greater than 0" do
-        article.co_author_ids = [user.id, 0]
+        article.co_author_ids = [article.user, 0]
 
         expect(article).not_to be_valid
       end
@@ -164,8 +125,6 @@ RSpec.describe Article do
     end
 
     describe "#canonical_url_must_not_have_spaces" do
-      let!(:article) { build(:article, user: user) }
-
       it "is valid without spaces" do
         valid_url = "https://www.positronx.io/angular-radio-buttons-example/"
         article.canonical_url = valid_url
@@ -176,10 +135,9 @@ RSpec.describe Article do
       it "is not valid with spaces" do
         invalid_url = "https://www.positronx.io/angular radio-buttons-example/"
         article.canonical_url = invalid_url
-        message = "must not have spaces"
 
         expect(article).not_to be_valid
-        expect(article.errors.messages[:canonical_url]).to include(message)
+        expect(article.errors.added?(:canonical_url, I18n.t("models.article.must_not_have_spaces"))).to be true
       end
     end
 
@@ -193,17 +151,22 @@ RSpec.describe Article do
     end
 
     describe "polls" do
-      let!(:poll) { create(:poll, article: article) }
+      let(:poll) { build_stubbed(:poll, article: article) }
 
       it "does not allow the use of admin-only liquid tags for non-admins" do
         article.body_markdown = "hello hey hey hey {% poll #{poll.id} %}"
-        expect(article.valid?).to be(false)
+
+        expect(article).not_to be_valid
       end
 
       it "allows admins" do
-        article.user.add_role(:admin)
+        user = create(:user, :admin)
+        article = build_stubbed(:article, user: user)
         article.body_markdown = "hello hey hey hey {% poll #{poll.id} %}"
-        expect(article.valid?).to be(true)
+        article.title = "huh"
+        allow(Poll).to receive(:find).with("#{poll.id} ").and_return(poll)
+
+        expect(article).to be_valid
       end
     end
 
@@ -274,23 +237,49 @@ RSpec.describe Article do
     end
 
     describe "tag validation" do
-      let(:article) { build(:article, user: user) }
-
       # See https://github.com/forem/forem/pull/6302
       # rubocop:disable RSpec/VerifiedDoubles
       it "does not modify the tag list if there are no adjustments" do
         allow(TagAdjustment).to receive(:where).and_return(TagAdjustment.none)
         allow(article).to receive(:tag_list).and_return(spy("tag_list"))
 
-        article.save
+        article.validate
 
-        # We expect this to happen once in #evaluate_front_matter
         expect(article.tag_list).to have_received(:add).once
         expect(article.tag_list).not_to have_received(:remove)
       end
       # rubocop:enable RSpec/VerifiedDoubles
     end
   end
+
+  describe "::admin_published_with" do
+    it "includes mascot-published articles" do
+      allow(Settings::General).to receive(:mascot_user_id).and_return(3)
+      user = create(:user, id: 3)
+      create(:article, user: user, tags: "challenge")
+      expect(described_class.admin_published_with("challenge").count).to eq(1)
+    end
+
+    it "includes staff-user-published articles" do
+      allow(Settings::Community).to receive(:staff_user_id).and_return(3)
+      user = create(:user, id: 3)
+      create(:article, user: user, tags: "challenge")
+      expect(described_class.admin_published_with("challenge").count).to eq(1)
+    end
+
+    it "includes admin published articles" do
+      user = create(:user, :admin)
+      create(:article, user: user, tags: "challenge")
+      expect(described_class.admin_published_with("challenge").count).to eq(1)
+    end
+
+    it "does not include regular user published articles" do
+      user = create(:user)
+      create(:article, user: user, tags: "challenge")
+      expect(described_class.admin_published_with("challenge").count).to eq(0)
+    end
+  end
+
 
   context "when data is extracted from evaluation of the front matter during validation" do
     let!(:title) { "Talk About It, Justify It" }

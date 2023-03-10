@@ -814,7 +814,7 @@ class Article < ApplicationRecord
   def validate_co_authors_must_not_be_the_same
     return if co_author_ids.uniq.count == co_author_ids.count
 
-    errors.add(:base, I18n.t("models.article.unique_coauthor"))
+    errors.add(:co_author_ids, I18n.t("models.article.unique_coauthor"))
   end
 
   def validate_co_authors_exist
