@@ -98,6 +98,15 @@ describe('FollowUsers', () => {
     );
 
     expect(queryByText(/skip for now/i)).toBeDefined();
+
+    // New logic starts following all, so start by deselecting
+    expect(queryByText(/You're following 3 people/i)).toBeDefined();
+    expect(queryByText(/continue/i)).toBeDefined();
+
+    // new logic starts with everyone followed, so let's first deselect them
+    const deselecAllSelector = await findByText(/Deselect all/i);
+    deselecAllSelector.click();
+    expect(queryByText(/This should fail/i)).toBeDefined();
     expect(queryByText(/You're not following anyone/i)).toBeDefined();
 
     // follow the first user
@@ -115,8 +124,6 @@ describe('FollowUsers', () => {
 
     await findByText('Following');
 
-    expect(queryByText(/You're following 2 people/i)).toBeDefined();
-    expect(queryByText(/continue/i)).toBeDefined();
   });
 
   it('should have a functioning de/select all toggle', async () => {
